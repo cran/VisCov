@@ -1,1 +1,1 @@
-export(VisCov, panelSelectMultiple, panelSelect, CheckPD)
+export(VisCov, panelSelectMultiple, panelSelect)

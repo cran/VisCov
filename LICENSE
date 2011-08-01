@@ -122,5 +122,5 @@ Annex A :
 Description of the Software
 VisCov is an R-package that allows one to generate samples from a specific prior distribution, 
 draw the four-layered graphs and return the sampled matrices and the related information on the distribution.
-Tokuda, T., Goodrich, B., Van Mechelen, I., Gelman, A., & Tuerlinckx, F. (). Visualizing Distributions of Covariance Matrices. 
+Tokuda, T., Goodrich, B., Van Mechelen, I., Gelman, A., & Tuerlinckx, F. Visualizing Distributions of Covariance Matrices. 
 (submitted for publication).

@@ -8,10 +8,7 @@
 #library(KernSmooth)
 
 ##### Main functions 
-VisCov <- function (distribution = "Inverse Wishart", param = list(prob = 0.5, dim = 4, nu = 5, scaleCov = diag(1,4)), title = distribution,
-Ncontours=100, Nsamples=1000, logSD = TRUE, histogram.Variance = TRUE, histogram.Correlation = TRUE,
-histogram.Effective.Variance = TRUE, histogram.Effective.Dependence = TRUE,
-extreme.regio="Effective Dependence", title.logical = TRUE) 
+VisCov <- function(distribution = "Inverse Wishart", param = list(prob = 0.5, dim = 4, nu = 5, scaleCov = diag(1,4)), title = distribution, Nsamples = 1000, Ncontours = 100, logSD = TRUE, histogram.Variance = TRUE, histogram.Correlation = TRUE, histogram.Effective.Variance = TRUE, histogram.Effective.Dependence = TRUE, extreme.regio = "Effective Dependence", title.logical = TRUE) 
 {
     
     ##### Fundamental constants used by the program
