@@ -1,11 +1,11 @@
 ################################### R code for "VisCov"
 ### Needed packages
-#library(clusterGeneration)
-#library(bayesm)
-#library(MASS)
-#library(TeachingDemos)
-#library(scatterplot3d)
-#library(KernSmooth)
+library(clusterGeneration)
+library(bayesm)
+library(MASS)
+library(TeachingDemos)
+library(scatterplot3d)
+library(KernSmooth)
 
 ##### Main functions 
 VisCov <- function(distribution = "Inverse Wishart", param = list(prob = 0.5, dim = 4, nu = 5, scaleCov = diag(1,4)), title = distribution, Nsamples = 1000, Ncontours = 100, logSD = TRUE, histogram.Variance = TRUE, histogram.Correlation = TRUE, histogram.Effective.Variance = TRUE, histogram.Effective.Dependence = TRUE, extreme.regio = "Effective Dependence", title.logical = TRUE) 
@@ -315,7 +315,9 @@ ThreeDcorPlot <- function(CovPlotData, range.yaxis = NULL)
         lab = c(2,2,3), lab.z = 2,xlab="", ylab = "", zlab = "")	     
       mtext(side = 1, text = expression(rho[1:2]), line = 0.5, adj = 0.3, cex = 0.7)
       mtext(side = 2, text = expression(rho[1:3]), line = 0.5, adj = 0.4, cex = 0.7)
-      mtext(side = 4, expression(rho[2:3]), srt = 35, cex = 0.7, line = -0.7)
+    par(srt = 45)
+    mtext(expression(rho[2:3]), at = 0, cex = 0.7, line = -0.7)
+     par(srt = 0)
       extreme.regio.logical = CovPlotData$extreme.regio.logical
       if (CovPlotData$extreme.regio == "Effective Variance"){
     	     base = CovPlotData$HistEffective.Variance.out
