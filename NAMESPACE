@@ -1,1 +1,13 @@
 export(VisCov, panelSelectMultiple, panelSelect)
+import(bayesm)
+import(clusterGeneration)
+import(scatterplot3d)
+import(KernSmooth)
+
+importFrom("grDevices", "dev.cur", "dev.set", "dev.new", "rgb")
+importFrom("graphics", "axis", "box", "clip", "hist", "layout",
+               "lines", "locator", "mtext", "par", "points", "rug",
+               "smoothScatter", "title")
+importFrom("stats", "cov2cor", "dbeta", "density", "pnorm", "qchisq",
+               "qnorm", "quantile", "rexp", "runif")
+importFrom("graphics", "grconvertX", "grconvertY")

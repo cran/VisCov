@@ -12,8 +12,7 @@ VisCov(distribution = "Inverse Wishart", param = list(prob = 0.5, dim = 4, nu = 
        extreme.regio = "Effective Dependence", title.logical = TRUE) 
 }
 \arguments{
-\item{distribution}{a distribution to be plotted among:}
-\item{}{"Inverse Wishart", "Scaled Inverse Wishart", "Scaled Inverse Wishart for correlation",
+\item{distribution}{a distribution to be plotted among:\cr\cr "Inverse Wishart", "Scaled Inverse Wishart", "Scaled Inverse Wishart for correlation",
 "Scaled with uniform on correlation", "Wishart", and "User defined distribution"}
 \item{title.logical}{a logical value indicating whether a title should be given to the graph}
 \item{title}{title of the graph}
@@ -41,6 +40,7 @@ or a density curve (FALSE)}
 \details{
 \code{VisCov} generates samples from a specific distribution of covariance matrices (or user defined distribution), draws the four-layered graphs and returns the sampled matrices and the related information on the distribution. For more detail, see Tokuda et al. in the following references.
 }
+\value{List of variables to pass for selecting panels}
 
 \references{
 Tokuda, T., Goodrich, B.,  Van Mechelen, I., Gelman, A., & Tuerlinckx, F. (submitted). Visualizing Distributions of Covariance Matrices
@@ -67,7 +67,7 @@ selected.condition = c("scatter1", "scatter4", "contour", "Effective.Dependence"
 panelSelectMultiple(selected.condition, list(CovPlotData1, CovPlotData2))
 
 ## Figure 3
-\dontrun{
+\donttest{
 distribution = "Inverse Wishart"
 dim = 4
 param = list(prob = 0.5, dim = dim, nu = dim+1, scaleCov = diag(1,dim))
@@ -89,7 +89,7 @@ selected.condition = c("scatter1", "scatter2", "scatter4", "contour")
 panelSelectMultiple(selected.condition, list(CovPlotData1, CovPlotData2))
 
 ## Figure 5
-\dontrun{
+\donttest{
 distribution = "Scaled with uniform on correlation"
 dim = 4
 param = list(mu0 = 0, s0 = 1, prob = 0.5, dim = dim)
@@ -111,7 +111,7 @@ selected.condition = c("scatter2", "scatter4", "contour","Effective.Dependence")
 panelSelectMultiple(selected.condition, list(CovPlotData1,CovPlotData2))
 
 ## Figure 7
-\dontrun{
+\donttest{
 distribution = "Wishart"
 dim = 4
 param = list(prob = 0.5, dim = dim, nu = dim+1, scaleCov = diag(1,dim))
@@ -123,7 +123,7 @@ selected.condition = c("scatter2", "scatter4", "contour","Effective.Dependence")
 panelSelectMultiple(selected.condition, list(CovPlotData1,CovPlotData2))}
 
 ## Figure 8
-\dontrun{
+\donttest{
 distribution = "User defined distribution"
 param = list()
 mat = list()

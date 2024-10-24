@@ -12,6 +12,7 @@ panelSelect(panel.no, CovPlotData)
 \item{CovPlotData}{the output list returned by \code{VisCov}}
 }
 
+\value{No return value, called for side effects}
 \details{
 After drawing a graph by \code{VisCov}, one can select and draw the specified number of panels by clicking the mouse on the panels of interest.
 }
@@ -21,7 +22,7 @@ Tokuda, T., Goodrich, B.,  Van Mechelen, I., Gelman, A., & Tuerlinckx, F. (submi
 }
 
 \examples{
-\dontrun{
+\donttest{
 CovPlotData = VisCov()
 panelSelect(panel.no = 1, CovPlotData) ## Click once on the plot you want to select
 panelSelect(panel.no = 4, CovPlotData) ## Click four times on the plots you want to select}

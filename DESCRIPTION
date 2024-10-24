@@ -1,20 +1,28 @@
 Package: VisCov
-Version: 1.3
-Date: 2012-07-27
-Title: Visualizing of distributions of covariance matrices
-Author: Tomoki Tokuda <tomoki.tokuda@psy.kuleuven.be>; Ben Goodrich
-        <bg2382@columbia.edu>; Iven Van Mechelen
-        <iven.vanmechelen@psy.kuleuven.be>; Andrew Gelman
-        <gelman@stat.columbia.edu>; Francis Tuerlinckx
-        <francis.tuerlinckx@psy.kuleuven.be>
-Maintainer: Tomoki Tokuda <tomoki.tokuda@psy.kuleuven.be>
-Depends: R (>= 2.12.0), bayesm, MASS, clusterGeneration, TeachingDemos,
-        scatterplot3d, KernSmooth
-Description: Visualizing of distributions of covariance matrices
-License: file LICENSE
-URL: http://ppw.kuleuven.be/okp/software/VisCov/
-Packaged: 2012-07-27 14:40:53 UTC; u0057158
-Repository: CRAN
-Date/Publication: 2012-07-27 17:08:03
+Title: Visualizing of Distributions of Covariance Matrices
+Version: 1.4.0
+Authors@R: c(
+            person("Tomoki", "Tokuda", email = "t-tokuda@eri.u-tokyo.ac.jp", role= c("aut")),
+            person("Ben", "Goodrich", email = "bg2382@columbia.edu", role= c("ctb")),
+            person("Iven", "Van Mechelen", email = "iven.vanmechelen@kuleuven.be", role= c("ctb")),
+            person("Andrew", "Gelman", email = "gelman@stat.columbia.edu", role= c("ctb")),
+            person("Francis", "Tuerlinckx", email = "francis.tuerlinckx@kuleuven.be", role= c("ctb")),
+            person("Kristof", "Meers", email = "kristof.meers+cran@kuleuven.be", role=c("cre"))
+            )
+Maintainer: Kristof Meers <kristof.meers+cran@kuleuven.be>
+Depends: R (>= 2.12.0)
+Imports: bayesm, clusterGeneration, scatterplot3d, KernSmooth
+Description: Visualizing of distributions of covariance matrices.
+    The package implements the methodology described in Tokuda, T., Goodrich, B., Van Mechelen, I., Gelman, A., & Tuerlinckx, F. (2012) <https://stat.columbia.edu/~gelman/research/unpublished/Visualization.pdf>.
+License: GPL (>= 3)
 NeedsCompilation: no
-License_restricts_use: yes
+Language: en-US
+Packaged: 2024-10-22 15:13:41 UTC; u0046811
+Author: Tomoki Tokuda [aut],
+  Ben Goodrich [ctb],
+  Iven Van Mechelen [ctb],
+  Andrew Gelman [ctb],
+  Francis Tuerlinckx [ctb],
+  Kristof Meers [cre]
+Repository: CRAN
+Date/Publication: 2024-10-24 15:10:02 UTC
