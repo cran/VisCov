@@ -1,13 +1,13 @@
 ################################### R code for "VisCov"
 
 ##### Main functions
-VisCov <- function(distribution = "Inverse Wishart", param = list(prob = 0.5, dim = 4, nu = 5, scaleCov = diag(1, 4)), title = distribution, Nsamples = 1000, Ncontours = 100, logSD = TRUE, histogram.Variance = TRUE, histogram.Correlation = TRUE, histogram.Effective.Variance = TRUE, histogram.Effective.Dependence = TRUE, extreme.regio = "Effective Dependence", title.logical = TRUE) {
+VisCov <- function(distribution = "Inverse Wishart", param = list(prob = 0.5, dim = 4, nu = 5, eta = 1, scaleCov = diag(1, 4)), title = distribution, Nsamples = 1000, Ncontours = 100, logSD = TRUE, histogram.Variance = TRUE, histogram.Correlation = TRUE, histogram.Effective.Variance = TRUE, histogram.Effective.Dependence = TRUE, extreme.regio = "Effective Dependence", title.logical = TRUE) {
   ##### Fundamental constants used by the program
   ## List of distributions
   distribution.list <- c(
     "User defined distribution", "Wishart", "Inverse Wishart", "Scaled Inverse Wishart",
     "Scaled Inverse Wishart for correlation", "Scaled with uniform on correlation",
-    "Jeffreys", "Hierarchical Inverse Wishart"
+    "Jeffreys", "Hierarchical Inverse Wishart", "LKJ"
   )
 
   ## List of variables to pass for selecting panels
@@ -33,7 +33,7 @@ VisCov <- function(distribution = "Inverse Wishart", param = list(prob = 0.5, di
     extreme.regio.logical <- FALSE
   }
   if (!(any(distribution == distribution.list))) {
-    stop("Distibution must be any of the following: ", paste(distribution.list, ", ", sep = ""), "\n")
+    stop("Distribution must be any of the following: ", paste(distribution.list, ", ", sep = ""), "\n")
   }
   if (distribution == "Jeffreys") {
     message("This may take a while!")
@@ -136,6 +136,8 @@ VisCov <- function(distribution = "Inverse Wishart", param = list(prob = 0.5, di
   }
   ## Save the ranges
   CovPlotData$range.yaxis.all <- range.yaxis.all
+
+  class(CovPlotData) <- "CovPlot"
 
   ## For selectioning panels
   return(CovPlotData)
@@ -257,6 +259,44 @@ panelSelectMultiple <- function(selected.condition, CovPlotDataMultiple, range.l
   }
 }
 
+
+panelSelectCorr <- function(CovPlotData, range.logical.contour = FALSE, range.logical.all = TRUE) {
+  def.par <- par(no.readonly = TRUE)
+  on.exit(par(def.par))
+
+  if (!is(CovPlotData, "CovPlot")) {
+    stop("CovPlotData is not a VisCov object")
+  }
+
+  selected.condition <- c("cor", "scatter4", "scatter5", "contour", "threeD", "Effective.Dependence", "Effective.Dependence.submatrix")
+  num.condition <- length(selected.condition)
+
+  dev.new(width = 8, height = 5, unit = "in")
+  par(pty = "s", omi = c(0.2, 0.2, 0.2, 0.2), mar = c(2.5, 2.5, 1, 1))
+  layout(matrix(c(1, 2, 4, 6, 0, 3, 5, 7), 2, 4, byrow = T))
+
+  for (i in 1:num.condition) {
+    select <- getSelect(selected.condition[i])
+    CovPlotData$SelectPlot <- select
+    if (select > 8) select <- 8
+
+    ## For having the same ranges across different datasets
+    contour.no <- 1
+    if (range.logical.contour == TRUE) {
+      contour.no <- 0
+    }
+    if (select != 6 & select != 7 & (select > contour.no) & range.logical.all == TRUE) {
+      range.get.condition <- CovPlotData$range.yaxis.all[[select]]
+      range.yaxis <- c(min(range.get.condition), max(range.get.condition))
+    } else {
+      range.yaxis <- NULL
+    }
+    ## For drawing plots
+    PlotFunction.list <- CovPlotData$PlotFunction.list
+    do.call(PlotFunction.list[select], list(CovPlotData, range.yaxis = range.yaxis))
+  }
+}
+
 ######### The other functions that are used in the main functions
 DimensionCheck <- function(matrix, dim) {
   matrixDim <- dim(matrix)
@@ -321,9 +361,6 @@ ThreeDCor <- function(param, cormat) {
 }
 
 ThreeDcorPlot <- function(CovPlotData, range.yaxis = NULL) {
-  def.par <- par(no.readonly = TRUE)
-  on.exit(par(def.par))
-
   if (CovPlotData$dim == 2) {
     plot(x = 1, y = 1, type = "n", axes = FALSE, xlab = "", ylab = "")
   } else {
@@ -331,18 +368,32 @@ ThreeDcorPlot <- function(CovPlotData, range.yaxis = NULL) {
     lowerRegion <- CovPlotData$lowerRegion
     CC <- CovPlotData$ThreeDCor.out
     op <- par(no.readonly = TRUE)
+    x <- CC[, 1]
+    y <- CC[, 2]
+    z <- CC[, 3]
     scatter3 <- scatterplot3d(
-      x = CC[, 1], y = CC[, 2], z = CC[, 3],
+      x = x, y = y, z = z,
       highlight.3d = FALSE, color = "grey35", angle = 24, pch = 20, cex.symbols = .5,
-      mar = op$mar, cex.axis = .5, x.ticklabs = c("-1", "0", "1"), y.ticklabs = c(-1, 0, 1),
+      mar = op$mar, cex.axis = .5, x.ticklabs = c(-1, 0, 1), y.ticklabs = c(-1, 0, 1),
       z.ticklabs = c(-1, 0, 1), xlim = c(-1, 1), ylim = c(-1, 1), zlim = c(-1, 1),
-      lab = c(2, 2, 3), lab.z = 2, xlab = "", ylab = "", zlab = ""
+      lab = c(2, 2, 3), lab.z = 2, xlab = "", ylab = "", zlab = "", y.margin.add = 0.2
     )
     mtext(side = 1, text = expression(rho[1:2]), line = 0.5, adj = 0.3, cex = 0.7)
     mtext(side = 2, text = expression(rho[1:3]), line = 0.5, adj = 0.4, cex = 0.7)
-    par(srt = 45)
-    mtext(expression(rho[2:3]), at = 0, cex = 0.7, line = -0.7)
-    par(srt = 0)
+
+    # Calculate the angle of the Y-axis in 2D (in degrees)
+    y_axis_diff <- scatter3$xyz.convert(c(0, 0), c(-1, 1), c(0, 0))
+
+    dx <- y_axis_diff$x[2] - y_axis_diff$x[1]
+    dy <- y_axis_diff$y[2] - y_axis_diff$y[1]
+    y_axis_angle <- atan2(dy, dx) * 180 / pi
+
+    dims <- par("usr")
+    x <- dims[1] + 0.80 * diff(dims[1:2])
+    y <- dims[3] + 0.05 * diff(dims[3:4])
+
+    text(x, y, labels = expression(rho[2:3]), srt = y_axis_angle, xpd = TRUE)
+
     extreme.regio.logical <- CovPlotData$extreme.regio.logical
     if (CovPlotData$extreme.regio == "Effective Variance") {
       base <- CovPlotData$HistEffective.Variance.out
@@ -565,6 +616,131 @@ ScatterPlot <- function(CovPlotData, range.yaxis = NULL) {
   return(range.yaxis)
 }
 
+ScatterPlotCor <- function(CovPlotData, range.yaxis = NULL) {
+  layout.matrix <- CovPlotData$layout.matrix
+  upperRegion <- CovPlotData$upperRegion
+  lowerRegion <- CovPlotData$lowerRegion
+  size.label <- CovPlotData$size.label
+  extreme.regio <- CovPlotData$extreme.regio
+  ppcex <- CovPlotData$ppcex
+  extreme.regio.logical <- CovPlotData$extreme.regio.logical
+  if (extreme.regio == "Effective Variance") {
+    base <- CovPlotData$HistEffective.Variance.out
+  }
+  if (extreme.regio == "Effective Dependence") {
+    base <- CovPlotData$HistEffective.Dependence.out
+  }
+  Scatter.out <- CovPlotData$Scatter.out
+  switch <- rep(1, 5)
+  no.panel <- length(layout.matrix[layout.matrix > 0])
+  if (!is.null(CovPlotData$SelectPlot)) {
+    switch <- rep(0, 5)
+    select <- CovPlotData$SelectPlot
+    switch[select - (no.panel - 5)] <- 1
+  }
+  k <- CovPlotData$dim
+  N <- CovPlotData$Nsamples
+  x <- rep(NA, N)
+  y <- rep(NA, N)
+  xlist <- list(c(2, 2), c(1, 2), c(2, 3), c(2, 3), c(3, 4))
+  ylist <- list(c(1, 1), c(1, 1), c(1, 1), c(1, 2), c(1, 2))
+  NumPlot <- c(0, 2, 4, 5)
+  if (k > 4) {
+    k <- 4
+  }
+
+  ## Find the range of log(sigma2)
+  if (k == 2) {
+    data.sigma2 <- c(
+      CovPlotData$Scatter.out[["x1"]], CovPlotData$Scatter.out[["y1"]],
+      CovPlotData$Scatter.out[["y2"]]
+    )
+  }
+  if (k > 2) {
+    data.sigma2 <- c(
+      CovPlotData$Scatter.out[["x1"]], CovPlotData$Scatter.out[["y1"]],
+      CovPlotData$Scatter.out[["y2"]], CovPlotData$Scatter.out[["y3"]]
+    )
+  }
+  range.sigma2 <- range(data.sigma2)
+  if (!is.null(range.yaxis)) {
+    range.sigma2 <- range.yaxis
+  }
+  range.yaxis <- range.sigma2
+
+  for (j in 1:NumPlot[k]) {
+    index1 <- xlist[[j]]
+    index2 <- ylist[[j]]
+    elementx <- k * (index1[1] - 1) + index1[2]
+    elementy <- k * (index2[1] - 1) + index2[2]
+    namex <- sprintf("x%d", j)
+    x <- Scatter.out[[namex]]
+    namey <- sprintf("y%d", j)
+    y <- Scatter.out[[namey]]
+    xlim <- c(-1, 1)
+    ylim <- c(-1, 1)
+    xlab <- GetLabel(index1[1], index1[2])
+    ylab <- GetLabel(index2[1], index2[2])
+    if (index1[1] == index1[2]) {
+      xlim <- range.sigma2
+      if (index1[1] == 1) {
+        xlab <- expression(log(sigma[1]))
+      }
+      if (index1[1] == 2) {
+        xlab <- expression(log(sigma[2]))
+      }
+    }
+    if (index2[1] == index2[2]) {
+      ylim <- range.sigma2
+      if (index2[1] == 1) {
+        ylab <- expression(log(sigma[1]))
+      }
+      if (index2[1] == 2) {
+        ylab <- expression(log(sigma[2]))
+      }
+    }
+    if (switch[j] == 1) {
+      if (j == 1) {
+        plot(x, y,
+          axes = FALSE, xlab = NA, ylab = NA, xlim = xlim,
+          ylim = ylim, type = "p", pch = 20, cex = ppcex, asp = 1, col = "grey35"
+        )
+        if (extreme.regio.logical) {
+          xy <- cbind(x, y, base)
+          xy2 <- subset(xy, base < quantile(base, probs = lowerRegion))
+          points(xy2[, 1:2], col = "blue", pch = 20, cex = ppcex)
+          xy2 <- subset(xy, base > quantile(base, probs = upperRegion))
+          points(xy2[, 1:2], col = rgb(1, 0.35, 0.35), pch = 20, cex = ppcex)
+        }
+      }
+      if (j > 1) {
+        plot(x, y,
+          axes = FALSE, xlab = NA, ylab = NA, xlim = xlim,
+          ylim = ylim, type = "p", pch = 20, col = "grey35", cex = ppcex, lab = c(2, 2, 4)
+        )
+        if (extreme.regio.logical) {
+          xy <- cbind(x, y, base)
+          xy2 <- subset(xy, base < quantile(base, probs = lowerRegion))
+          points(xy2[, 1:2], pch = 20, col = "blue", cex = ppcex)
+          xy2 <- subset(xy, base > quantile(base, probs = upperRegion))
+          points(xy2[, 1:2], pch = 20, col = rgb(1, 0.35, 0.35), cex = ppcex)
+        }
+      }
+      title(xlab = xlab, ylab = ylab, cex.lab = size.label, line = 1.3)
+      axis(1, padj = -0.8, c(roundoff(xlim[1], 1, 1), round(mean(xlim),
+        digits = 1
+      ), roundoff(xlim[2], 1, -1)))
+      axis(2, padj = 1, c(roundoff(ylim[1], 1, 1), round(mean(ylim),
+        digits = 1
+      ), roundoff(ylim[2], 1, -1)))
+      box()
+      ## end of if (switch[j]==1){
+    }
+  }
+  return(range.yaxis)
+}
+
+
 HistogramEffectiveDependence <- function(CovPlotData, range.yaxis = NULL) {
   upperRegion <- CovPlotData$upperRegion
   lowerRegion <- CovPlotData$lowerRegion
@@ -593,7 +769,6 @@ HistogramEffectiveDependence <- function(CovPlotData, range.yaxis = NULL) {
     ## Coloring both tails
     if (extreme.regio == "Effective Dependence") {
       tu <- par("usr")
-      par(xpd = FALSE)
       clip(tu[1], quantile(HistEffective.Dependence.out, lowerRegion), tu[3], tu[4])
       plot(tmp, col = "blue", add = TRUE)
       clip(quantile(HistEffective.Dependence.out, upperRegion), tu[2], tu[3], tu[4])
@@ -602,7 +777,7 @@ HistogramEffectiveDependence <- function(CovPlotData, range.yaxis = NULL) {
   } else {
     dens.depen <- density(HistEffective.Dependence.out)
     plot(dens.depen, xlab = "", ylab = "", main = "", xlim = c(0, 1), axes = FALSE)
-    ylab <- "Desnity"
+    ylab <- "Density"
   }
   xlab <- "Effective Dependence"
   title(xlab = xlab, ylab = ylab, cex.lab = size.label, line = 1.5)
@@ -615,9 +790,6 @@ HistogramEffectiveDependence <- function(CovPlotData, range.yaxis = NULL) {
 }
 
 HistogramEffectiveVariance <- function(CovPlotData, range.yaxis = NULL) {
-  def.par <- par(no.readonly = TRUE)
-  on.exit(par(def.par))
-
   upperRegion <- CovPlotData$upperRegion
   lowerRegion <- CovPlotData$lowerRegion
   size.label <- CovPlotData$size.label
@@ -645,7 +817,6 @@ HistogramEffectiveVariance <- function(CovPlotData, range.yaxis = NULL) {
     ## Coloring both tails
     if (extreme.regio == "Effective Variance") {
       tu <- par("usr")
-      par(xpd = FALSE)
       clip(tu[1], quantile(HistEffective.Variance.out, lowerRegion), tu[3], tu[4])
       plot(tmp, col = "blue", add = TRUE)
       LowerVariance <- HistEffective.Variance.out[HistEffective.Variance.out < quantile(HistEffective.Variance.out, lowerRegion)]
@@ -1072,6 +1243,15 @@ rScaledwithuniformoncorrelation <- function(dummy, param) {
   mat <- matDelta %*% R %*% matDelta
   return(mat)
 }
+
+rLKJ <- function(dummy, param) {
+  eta <- param$eta
+  dim <- param$dim
+  mat <- rlkjcorr(1, dim, eta = eta)
+  return(mat)
+}
+
+
 getSelect <- function(name) {
   name.list <- c("contour", "vari", "cor", "Effective.Variance", "Effective.Dependence", "Effective.Dependence.submatrix", "threeD", "scatter1", "scatter2", "scatter3", "scatter4", "scatter5")
   selected.number <- which(name.list == name)

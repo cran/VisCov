@@ -1,4 +1,4 @@
-export(VisCov, panelSelectMultiple, panelSelect)
+export(VisCov, panelSelectMultiple, panelSelect, panelSelectCorr)
 import(bayesm)
 import(clusterGeneration)
 import(scatterplot3d)
@@ -10,4 +10,6 @@ importFrom("graphics", "axis", "box", "clip", "hist", "layout",
                "smoothScatter", "title")
 importFrom("stats", "cov2cor", "dbeta", "density", "pnorm", "qchisq",
                "qnorm", "quantile", "rexp", "runif")
-importFrom("graphics", "grconvertX", "grconvertY")
+importFrom("graphics", "grconvertX", "grconvertY", "text")
+importFrom("trialr", "rlkjcorr")
+importFrom("methods", "is")

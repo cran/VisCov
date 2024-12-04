@@ -1,6 +1,7 @@
-1c55a7b7b1961e66c13b5cea839ea866 *DESCRIPTION
-62cf772c803e0cb726105ca17acfbab0 *NAMESPACE
-91db489a08598c0c21c2291ef813e14d *R/VisCov.R
-1555894b19b5451f6e3c31a77af3150d *man/VisCov.Rd
-ab366f05e982b6489d7e324f8b57df58 *man/panelSelect.Rd
-7ade2bf95b00e3ed31bb0f30061ba5b7 *man/panelSelectMultiple.Rd
+ec29276d9289f12a78cae4ec4a4cc35f *DESCRIPTION
+4cc164b73ed9250f3a0f042583f6d466 *NAMESPACE
+148a1435fb6081b43a03cc9bb7d16d98 *R/VisCov.R
+80cdf040b276ec57a620eef92f895fd0 *man/VisCov.Rd
+46c6d914394f07756bc08822682ade9f *man/panelSelect.Rd
+452c355cca38d5d9b1f355e64c353c46 *man/panelSelectCorr.Rd
+959d185a6c6353148b4de2455e2318b7 *man/panelSelectMultiple.Rd

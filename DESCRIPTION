@@ -1,6 +1,6 @@
 Package: VisCov
 Title: Visualizing of Distributions of Covariance Matrices
-Version: 1.4.0
+Version: 1.5.0
 Authors@R: c(
             person("Tomoki", "Tokuda", email = "t-tokuda@eri.u-tokyo.ac.jp", role= c("aut")),
             person("Ben", "Goodrich", email = "bg2382@columbia.edu", role= c("ctb")),
@@ -11,13 +11,16 @@ Authors@R: c(
             )
 Maintainer: Kristof Meers <kristof.meers+cran@kuleuven.be>
 Depends: R (>= 2.12.0)
-Imports: bayesm, clusterGeneration, scatterplot3d, KernSmooth
+Imports: bayesm, clusterGeneration, scatterplot3d, KernSmooth, trialr,
+        methods
 Description: Visualizing of distributions of covariance matrices.
     The package implements the methodology described in Tokuda, T., Goodrich, B., Van Mechelen, I., Gelman, A., & Tuerlinckx, F. (2012) <https://stat.columbia.edu/~gelman/research/unpublished/Visualization.pdf>.
 License: GPL (>= 3)
 NeedsCompilation: no
 Language: en-US
-Packaged: 2024-10-22 15:13:41 UTC; u0046811
+RoxygenNote: 7.3.2
+Encoding: UTF-8
+Packaged: 2024-12-04 11:41:47 UTC; u0046811
 Author: Tomoki Tokuda [aut],
   Ben Goodrich [ctb],
   Iven Van Mechelen [ctb],
@@ -25,4 +28,4 @@ Author: Tomoki Tokuda [aut],
   Francis Tuerlinckx [ctb],
   Kristof Meers [cre]
 Repository: CRAN
-Date/Publication: 2024-10-24 15:10:02 UTC
+Date/Publication: 2024-12-04 12:00:02 UTC
