@@ -18,7 +18,7 @@ VisCov(distribution = "Inverse Wishart", param = list(prob = 0.5, dim = 4,
 \arguments{
   \item{distribution}{a distribution to be plotted among:\cr\cr 
   "Inverse Wishart", "Scaled Inverse Wishart", "Scaled Inverse Wishart for 
-  correlation", "Scaled with uniform on correlation", "Wishart", "LKJ", and 
+  correlation", "Scaled with uniform on correlation", "Wishart", "LKJ", "Scaled LKJ", and 
   "User defined distribution".}
   \item{title.logical}{a logical value indicating whether a title should be 
   given to the graph.}

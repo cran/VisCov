@@ -7,7 +7,7 @@ VisCov <- function(distribution = "Inverse Wishart", param = list(prob = 0.5, di
   distribution.list <- c(
     "User defined distribution", "Wishart", "Inverse Wishart", "Scaled Inverse Wishart",
     "Scaled Inverse Wishart for correlation", "Scaled with uniform on correlation",
-    "Jeffreys", "Hierarchical Inverse Wishart", "LKJ"
+    "Jeffreys", "Hierarchical Inverse Wishart", "LKJ", "Scaled LKJ"
   )
 
   ## List of variables to pass for selecting panels
@@ -1248,6 +1248,20 @@ rLKJ <- function(dummy, param) {
   eta <- param$eta
   dim <- param$dim
   mat <- rlkjcorr(1, dim, eta = eta)
+  return(mat)
+}
+
+rScaledLKJ <- function(dummy, param) {
+  eta <- param$eta
+  dim <- param$dim
+  mu0 <- param$mu0
+  s0 <- param$s0
+  R <- rlkjcorr(1, dim, eta = eta)
+  qq <- pnorm(0, mu0, s0)
+  d.u <- runif(dim, qq, 1)
+  d <- qnorm(d.u, mu0, s0)
+  matDelta <- diag(d)
+  mat <- matDelta %*% R %*% matDelta
   return(mat)
 }
 
